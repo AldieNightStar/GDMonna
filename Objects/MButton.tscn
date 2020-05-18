@@ -5,11 +5,35 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Button
 
-func change_font_size(num: int):
-	self.get_font(\"font\").size = num
+var font_size = 16
+var callback_fn
+var callback_o
+var callback_par
+
+func _ready():
+	call_deferred(\"update\")
+
+func set_onclick(func_name, obj, params = []):
+	callback_fn = func_name
+	callback_o = obj
+	callback_par = params
 
 func _pressed():
-	self.change_font_size(32)
+	if callback_fn and callback_o:
+		callback_o.callv(callback_fn, callback_par)
+
+func set_font_size(num: int):
+	font_size = num
+	self.get_font(\"font\").size = num
+
+func set_font(name: String):
+	self.get_font(\"font\").font_data = load(\"res://Fonts/\" + name)
+
+func get_font_name():
+	return self.get_font(\"font\").font_data.font_path
+
+func update():
+	self.set_font_size(font_size)
 "
 
 [node name="MButton" type="Button"]

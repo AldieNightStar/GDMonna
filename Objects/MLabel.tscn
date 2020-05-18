@@ -1,0 +1,79 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Fonts/Gputeks-Bold.ttf" type="DynamicFontData" id=1]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 1 )
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Label
+
+export var font_size = 16
+var _faded_text
+
+func _ready():
+	call_deferred(\"update\")
+
+func update():
+	set_font_size(font_size)
+
+func set_font_size(num: int):
+	font_size = num
+	self.get_font(\"font\").size = num
+	
+func set_font(name: String):
+	self.get_font(\"font\").font_data = load(\"res://Fonts/\" + name)
+
+func set_text_faded(new_text: String, speed: float = 1):
+	if speed < 0.1:
+		speed = 0.1
+	_faded_text = new_text
+	$fader.playback_speed = speed
+	$fader.play(\"Fade\")
+	
+func _fadeout():
+	text = _faded_text
+"
+
+[sub_resource type="Animation" id=3]
+resource_name = "Fade"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.5 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_fadeout"
+} ]
+}
+
+[node name="MLabel" type="Label"]
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 1 )
+text = "Monna Label"
+autowrap = true
+script = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="fader" type="AnimationPlayer" parent="."]
+anims/Fade = SubResource( 3 )

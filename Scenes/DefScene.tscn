@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Objects/MLabel.tscn" type="PackedScene" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+func print_text(text: String):
+	$label.text += text + \"\\n\"
+
+func set_text(text: String):
+	$label.text = text
+
+func set_text_faded(text: String, speed: float):
+	$label.set_text_faded(text, speed)
+
+func clear():
+	$label.text = \"\"
+	var nodes = $container.get_children()
+	for node in nodes:
+		node.queue_free()
+
+func add_button(text, onclick_fn_name, onclick_object, onclick_params = []):
+	var button : Button = load(\"res://Objects/MButton.tscn\").instance()
+	button.text = text
+	button.set_onclick(onclick_fn_name, onclick_object, onclick_params)
+	$container.add_child(button)
+"
+
+[node name="Scene" type="Node2D"]
+script = SubResource( 1 )
+
+[node name="container" type="VBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 271.0
+margin_right = 1023.0
+margin_bottom = 591.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="label" parent="." instance=ExtResource( 1 )]
+margin_left = 101.0
+margin_top = 43.0
+margin_right = 930.0
+margin_bottom = 259.0
+align = 1
+valign = 1
+font_size = 32
