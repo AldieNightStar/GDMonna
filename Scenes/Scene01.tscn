@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Modes/DefScene.tscn" type="PackedScene" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+var counter = 100
+onready var sc = $Scene
+
+func _ready():
+	cnt_change(0)
+	sc.add_button(\"Увеличить\", \"cnt_change\", self, [1])
+	sc.add_button(\"Уменьшить\", \"cnt_change\", self, [-1])
+
+func cnt_change(delta):
+	counter += delta
+	sc.set_text_faded(\"Count: \" + str(counter), 5)"
+
+[node name="Node2D" type="Node2D"]
+script = SubResource( 1 )
+
+[node name="Scene" parent="." instance=ExtResource( 1 )]

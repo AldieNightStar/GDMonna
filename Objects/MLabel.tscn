@@ -25,6 +25,8 @@ func set_font(name: String):
 	self.get_font(\"font\").font_data = load(\"res://Fonts/\" + name)
 
 func set_text_faded(new_text: String, speed: float = 1):
+	if $fader.is_playing():
+		$fader.stop()
 	if speed < 0.1:
 		speed = 0.1
 	_faded_text = new_text
